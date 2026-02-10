@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Valentine 💘</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      height: 100vh;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #ffe4ec, #fdf0f5);
+    }
+
+    .card {
+      width: min(520px, 92vw);
+      padding: 28px;
+      border-radius: 22px;
+      background: white;
+      box-shadow: 0 20px 40px rgba(0,0,0,.12);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 18px;
+    }
+
+    .valentine-img {
+      width: 220px;
+      max-width: 80%;
+      border-radius: 18px;
+      margin: 16px auto 22px;
+      display: block;
+      box-shadow: 0 10px 25px rgba(0,0,0,.18);
+    }
+
+    .arena {
+      position: relative;
+      height: 220px;
+      border-radius: 16px;
+      background: #fff0f6;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,.05);
+    }
+
+    button {
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 14px;
+      font-size: 16px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #yesBtn {
+      background: #22c55e;
+      color: white;
+      position: absolute;
+      left: 20px;
+      bottom: 20px;
+    }
+
+    #noBtn {
+      background: #ef4444;
+      color: white;
+      position: absolute;
+    }
+
+    .result {
+      margin-top: 18px;
+      font-weight: 600;
+      min-height: 1.4em;
+      color: #16a34a;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1>Would you like to be my Valentine, sevgilim? 💘</h1>
+
+    <!-- 👇 CHANGE IMAGE NAME HERE -->
+    <img src="pic.jpg" alt="Valentine" class="valentine-img">
+
+    <p>I promise I’ll make you smile every day 💕</p>
+
+    <div class="arena" id="arena">
+      <button id="yesBtn">Yes 💚</button>
+      <button id="noBtn">No 😈</button>
+    </div>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const arena = document.getElementById("arena");
+    const noBtn  = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const result = document.getElementById("result");
+
+    function moveAway(mouseX, mouseY) {
+      const a = arena.getBoundingClientRect();
+      const b = noBtn.getBoundingClientRect();
+
+      const btnX = b.left - a.left + b.width / 2;
+      const btnY = b.top  - a.top  + b.height / 2;
+
+      let dx = btnX - mouseX;
+      let dy = btnY - mouseY;
+
+      const len = Math.hypot(dx, dy) || 1;
+      dx /= len;
+      dy /= len;
+
+      const distance = 90;
+
+      let x = btnX + dx * distance - b.width / 2;
+      let y = btnY + dy * distance - b.height / 2;
+
+      const pad = 8;
+      const maxX = a.width  - b.width  - pad;
+      const maxY = a.height - b.height - pad;
+
+      x = Math.max(pad, Math.min(maxX, x));
+      y = Math.max(pad, Math.min(maxY, y));
+
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top  = `${y}px`;
+    }
+
+    arena.addEventListener("mousemove", (e) => {
+      const a = arena.getBoundingClientRect();
+      const mouseX = e.clientX - a.left;
+      const mouseY = e.clientY - a.top;
+
+      const b = noBtn.getBoundingClientRect();
+      const btnX = b.left - a.left + b.width / 2;
+      const btnY = b.top  - a.top  + b.height / 2;
+
+      if (Math.hypot(mouseX - btnX, mouseY - btnY) < 100) {
+        moveAway(mouseX, mouseY);
+      }
+    });
+
+    noBtn.addEventListener("mouseenter", (e) => {
+      const a = arena.getBoundingClientRect();
+      moveAway(e.clientX - a.left, e.clientY - a.top);
+    });
+
+    yesBtn.addEventListener("click", () => {
+      result.textContent = "Yay! 💖 I knew you’d say yes!";
+    });
+
+    // Initial position
+    noBtn.style.left = "60%";
+    noBtn.style.top  = "60%";
+  </script>
+</body>
+</html>
